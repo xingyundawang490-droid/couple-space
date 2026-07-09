@@ -433,8 +433,8 @@ function setConn(ok){
 async function poll(){
   if(!serverUrl)return;
   try{
-    const url=`${serverUrl}/messages?token=${encodeURIComponent(serverToken)}${lastTs?'&since='+encodeURIComponent(lastTs):''}`;
-    const r=await fetch(url,{headers:{'ngrok-skip-browser-warning':'1'}});
+    const url=`${serverUrl}/messages?token=${encodeURIComponent(serverToken)}&ngrok-skip-browser-warning=1${lastTs?'&since='+encodeURIComponent(lastTs):''}`;
+    const r=await fetch(url);
     if(!r.ok){setConn(false);return;}
     setConn(true);
     const msgs=await r.json();
@@ -482,8 +482,8 @@ async function sendMsg(){
   document.getElementById('typingRow').style.display='flex';
   document.getElementById('chatMsgs').scrollTop=document.getElementById('chatMsgs').scrollHeight;
   try{
-    await fetch(`${serverUrl}/send?token=${encodeURIComponent(serverToken)}`,{
-      method:'POST',headers:{'Content-Type':'application/json','ngrok-skip-browser-warning':'1'},
+    await fetch(`${serverUrl}/send?token=${encodeURIComponent(serverToken)}&ngrok-skip-browser-warning=1`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({content})
     });
   }catch(e){toast('发送失败，检查服务器连接');}
@@ -528,7 +528,7 @@ function saveSettings(){
 async function loadAll(){
   if(!serverUrl)return;
   try{
-    const r=await fetch(`${serverUrl}/messages?token=${encodeURIComponent(serverToken)}`,{headers:{'ngrok-skip-browser-warning':'1'}});
+    const r=await fetch(`${serverUrl}/messages?token=${encodeURIComponent(serverToken)}&ngrok-skip-browser-warning=1`);
     if(!r.ok)return;setConn(true);
     allMessages=await r.json();
     if(allMessages.length)lastTs=allMessages[allMessages.length-1].ts;
