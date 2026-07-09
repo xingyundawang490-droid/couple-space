@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="小晏·小梨">
+<title>小晏·小梨</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FFF6F8;--card:#FFFFFF;--pink:#E8829A;
+  --pink-light:#F9D0DA;--pink-pale:#FFF0F3;
+  --mauve:#C4607A;--text:#2C1F24;--muted:#9A7880;
+  --border:#F0D4DA;--day-bg:#FCE8ED;
+}
+body{background:var(--bg);font-family:-apple-system,'PingFang SC',sans-serif;min-height:100vh;padding:24px 16px 60px;transition:background 0.3s,background-image 0.3s;background-size:cover;background-position:center;background-attachment:fixed}
+.bg-overlay{position:fixed;inset:0;z-index:-1;background-size:cover;background-position:center;background-attachment:fixed}
+.couple-name{text-align:center;font-size:12px;color:var(--muted);letter-spacing:3px;padding-top:16px;margin-bottom:20px}
+.avatars{display:flex;justify-content:center;align-items:flex-end;gap:24px;margin-bottom:6px}
+.avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.avatar-wrap .label{font-size:12px;color:var(--muted)}
+.avatar-btn{width:90px;height:90px;border-radius:50%;overflow:hidden;border:2.5px solid var(--border);cursor:pointer;position:relative;background:var(--pink-pale)}
+.avatar-btn img{width:100%;height:100%;object-fit:cover}
+.avatar-btn svg{width:100%;height:100%}
+.avatar-hint{position:absolute;inset:0;background:rgba(0,0,0,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;color:#fff;font-size:20px}
+.avatar-btn:hover .avatar-hint,.avatar-btn:active .avatar-hint{opacity:1}
+input[type=file]{display:none}
+.heart{text-align:center;font-size:14px;color:var(--pink);margin-bottom:4px}
+
+.days-card{background:var(--day-bg);border:1px solid var(--border);border-radius:20px;padding:22px;margin:16px 0;text-align:center}
+.days-num{font-size:56px;font-weight:600;color:var(--mauve);line-height:1}
+.days-label{font-size:13px;color:var(--muted);margin-top:4px}
+.days-since{font-size:11px;color:var(--pink);margin-top:6px;letter-spacing:0.5px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin:12px 0}
+.card-title{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:12px}
+.ann-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--pink-pale)}
+.ann-item:last-child{border-bottom:none}
+.ann-name{font-size:14px;color:var(--text)}
+.ann-date{font-size:11px;color:var(--muted);margin-top:2px}
+.ann-countdown{font-size:13px;color:var(--pink);font-weight:500}
+
+.color-row{display:flex;gap:10px;flex-wrap:wrap}
+.color-dot{width:34px;height:34px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.15s}
+.color-dot.active{border-color:var(--mauve);transform:scale(1.15)}
+
+.quote{text-align:center;padding:24px 16px;font-size:13px;color:var(--muted);font-style:italic;line-height:1.9}
+
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:rgba(44,31,36,0.85);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="couple-name">小 晏 · 小 梨</div>
+
+<div class="avatars">
+  <div class="avatar-wrap">
+    <div class="avatar-btn" id="avatarA" onclick="document.getElementById('fileA').click()">
+      <img id="imgA" src="" style="display:none" alt="小晏头像">
+      <svg id="svgA" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="45" cy="45" r="44" fill="#FFF0F3" stroke="#F0D4DA" stroke-width="1"/>
+        <ellipse cx="45" cy="52" rx="18" ry="20" fill="#FFE0C8"/>
+        <ellipse cx="45" cy="38" rx="16" ry="17" fill="#FFE0C8"/>
+        <ellipse cx="45" cy="28" rx="18" ry="14" fill="#E8E8E8"/>
+        <ellipse cx="35" cy="24" rx="10" ry="8" fill="#D8D8D8"/>
+        <ellipse cx="55" cy="24" rx="10" ry="8" fill="#D8D8D8"/>
+        <ellipse cx="45" cy="20" rx="14" ry="10" fill="#EFEFEF"/>
+        <ellipse cx="30" cy="30" rx="5" ry="10" fill="#E0E0E0"/>
+        <ellipse cx="60" cy="30" rx="5" ry="10" fill="#E0E0E0"/>
+        <circle cx="39" cy="39" r="3" fill="#4A3040"/>
+        <circle cx="51" cy="39" r="3" fill="#4A3040"/>
+        <circle cx="40" cy="38" r="1" fill="#fff"/>
+        <circle cx="52" cy="38" r="1" fill="#fff"/>
+        <path d="M41 44 Q45 47 49 44" stroke="#C4607A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <rect x="32" y="34" width="12" height="5" rx="2.5" fill="#FFB6C1" opacity="0.6"/>
+        <line x1="32" y1="36.5" x2="44" y2="36.5" stroke="#E8829A" stroke-width="0.8"/>
+        <line x1="36" y1="34" x2="36" y2="39" stroke="#E8829A" stroke-width="0.8"/>
+        <line x1="39" y1="34" x2="39" y2="39" stroke="#E8829A" stroke-width="0.8"/>
+        <line x1="42" y1="34" x2="42" y2="39" stroke="#E8829A" stroke-width="0.8"/>
+      </svg>
+      <div class="avatar-hint">换图</div>
+    </div>
+    <input type="file" id="fileA" accept="image/*">
+    <span class="label">小晏</span>
+  </div>
+
+  <div style="align-self:center;font-size:18px;color:var(--pink);padding-bottom:20px">🩷</div>
+
+  <div class="avatar-wrap">
+    <div class="avatar-btn" id="avatarB" onclick="document.getElementById('fileB').click()">
+      <img id="imgB" src="" style="display:none" alt="小梨头像">
+      <svg id="svgB" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="45" cy="45" r="44" fill="#FFF0F3" stroke="#F0D4DA" stroke-width="1"/>
+        <ellipse cx="45" cy="52" rx="18" ry="20" fill="#FFE0C8"/>
+        <ellipse cx="45" cy="38" rx="16" ry="17" fill="#FFE0C8"/>
+        <ellipse cx="45" cy="28" rx="18" ry="14" fill="#2C2420"/>
+        <ellipse cx="35" cy="24" rx="10" ry="8" fill="#2C2420"/>
+        <ellipse cx="55" cy="24" rx="10" ry="8" fill="#2C2420"/>
+        <ellipse cx="45" cy="20" rx="14" ry="10" fill="#332820"/>
+        <ellipse cx="30" cy="30" rx="5" ry="12" fill="#2C2420"/>
+        <ellipse cx="60" cy="30" rx="5" ry="12" fill="#2C2420"/>
+        <path d="M28 26 Q45 18 62 26" stroke="#2C2420" stroke-width="6" fill="none"/>
+        <circle cx="39" cy="39" r="3" fill="#4A3040"/>
+        <circle cx="51" cy="39" r="3" fill="#4A3040"/>
+        <circle cx="40" cy="38" r="1" fill="#fff"/>
+        <circle cx="52" cy="38" r="1" fill="#fff"/>
+        <path d="M41 44 Q45 47 49 44" stroke="#C4607A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="37" cy="43" rx="4" ry="2.5" fill="#FFB0B0" opacity="0.5"/>
+        <ellipse cx="53" cy="43" rx="4" ry="2.5" fill="#FFB0B0" opacity="0.5"/>
+        <rect x="46" y="36" width="12" height="5" rx="2.5" fill="#FFB6C1" opacity="0.6"/>
+        <line x1="46" y1="38.5" x2="58" y2="38.5" stroke="#E8829A" stroke-width="0.8"/>
+        <line x1="50" y1="36" x2="50" y2="41" stroke="#E8829A" stroke-width="0.8"/>
+        <line x1="53" y1="36" x2="53" y2="41" stroke="#E8829A" stroke-width="0.8"/>
+        <line x1="56" y1="36" x2="56" y2="41" stroke="#E8829A" stroke-width="0.8"/>
+      </svg>
+      <div class="avatar-hint">换图</div>
+    </div>
+    <input type="file" id="fileB" accept="image/*">
+    <span class="label">小梨</span>
+  </div>
+</div>
+
+<div class="days-card">
+  <div class="days-num" id="daysNum">0</div>
+  <div class="days-label">在一起的第 <span id="daysSpan">0</span> 天</div>
+  <div class="days-since">2026年6月25日 · 那个小窗</div>
+</div>
+
+<div class="card">
+  <div class="card-title">纪念日倒计时</div>
+  <div class="ann-item">
+    <div>
+      <div class="ann-name">相识纪念日</div>
+      <div class="ann-date">每年 6月25日</div>
+    </div>
+    <div class="ann-countdown" id="annDays">计算中</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">背景主题</div>
+  <div class="color-row" id="colorRow"></div>
+  <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
+    <div id="bgImgBtn" onclick="document.getElementById('fileBg').click()" style="width:34px;height:34px;border-radius:8px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0">🖼️</div>
+    <div style="flex:1">
+      <div id="bgImgName" style="font-size:12px;color:var(--muted)">点左边上传背景图片</div>
+    </div>
+    <div id="bgClearBtn" onclick="clearBgImg()" style="display:none;font-size:12px;color:var(--pink);cursor:pointer;flex-shrink:0">清除</div>
+  </div>
+  <input type="file" id="fileBg" accept="image/*">
+</div>
+
+<div class="quote" id="quoteBox"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const start = new Date('2026-06-25');
+const today = new Date(); today.setHours(0,0,0,0);
+const days = Math.floor((today - start)/86400000)+1;
+document.getElementById('daysNum').textContent = days;
+document.getElementById('daysSpan').textContent = days;
+
+function nextAnn(){
+  const y = today.getFullYear();
+  let n = new Date(y,5,25);
+  if(n<=today) n=new Date(y+1,5,25);
+  return Math.ceil((n-today)/86400000);
+}
+document.getElementById('annDays').textContent = '还有 '+nextAnn()+' 天';
+
+function setupAvatar(fileId, imgId, svgId, storageKey){
+  const file = document.getElementById(fileId);
+  const img = document.getElementById(imgId);
+  const svg = document.getElementById(svgId);
+  const saved = localStorage.getItem(storageKey);
+  if(saved){img.src=saved;img.style.display='block';svg.style.display='none';}
+  file.addEventListener('change',e=>{
+    const f = e.target.files[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = ev=>{
+      img.src=ev.target.result;
+      img.style.display='block';
+      svg.style.display='none';
+      try{localStorage.setItem(storageKey,ev.target.result);}catch(err){}
+      showToast('头像已更新');
+    };
+    r.readAsDataURL(f);
+  });
+}
+setupAvatar('fileA','imgA','svgA','avatar_xiaoyan');
+setupAvatar('fileB','imgB','svgB','avatar_xiaoli');
+
+// background image
+function applyBgImg(dataUrl, name){
+  document.body.style.backgroundImage = `url(${dataUrl})`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+  document.getElementById('bgImgName').textContent = name || '已设置背景图';
+  document.getElementById('bgClearBtn').style.display = 'block';
+  document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('active'));
+}
+function clearBgImg(){
+  document.body.style.backgroundImage = '';
+  localStorage.removeItem('bg_img');
+  localStorage.removeItem('bg_img_name');
+  document.getElementById('bgImgName').textContent = '点左边上传背景图片';
+  document.getElementById('bgClearBtn').style.display = 'none';
+  const savedColor = localStorage.getItem('bg_theme') || '#FFF6F8';
+  document.body.style.background = savedColor;
+  document.querySelectorAll('.color-dot').forEach(d=>{
+    if(d.dataset.bg === savedColor) d.classList.add('active');
+  });
+  showToast('已恢复纯色背景');
+}
+const savedBgImg = localStorage.getItem('bg_img');
+const savedBgImgName = localStorage.getItem('bg_img_name');
+if(savedBgImg){ applyBgImg(savedBgImg, savedBgImgName); }
+document.getElementById('fileBg').addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = ev=>{
+    try{ localStorage.setItem('bg_img', ev.target.result); localStorage.setItem('bg_img_name', f.name); }catch(err){}
+    applyBgImg(ev.target.result, f.name);
+    showToast('背景已更新');
+  };
+  r.readAsDataURL(f);
+});
+
+const themes=[
+  {bg:'#FFF6F8',name:'樱花粉'},
+  {bg:'#F0F4FF',name:'晴空蓝'},
+  {bg:'#F0FFF4',name:'薄荷绿'},
+  {bg:'#FFF8F0',name:'奶油橙'},
+  {bg:'#F8F0FF',name:'薰衣紫'},
+  {bg:'#FFFDF0',name:'柠檬黄'},
+];
+const savedBg = localStorage.getItem('bg_theme') || '#FFF6F8';
+if(!savedBgImg) document.body.style.background = savedBg;
+const row = document.getElementById('colorRow');
+themes.forEach(t=>{
+  const d=document.createElement('div');
+  d.dataset.bg=t.bg;
+  d.className='color-dot'+(t.bg===savedBg&&!savedBgImg?' active':'');
+  d.style.background=t.bg;
+  d.title=t.name;
+  d.onclick=()=>{
+    document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('active'));
+    d.classList.add('active');
+    document.body.style.backgroundImage='';
+    document.body.style.background=t.bg;
+    localStorage.setItem('bg_theme',t.bg);
+    localStorage.removeItem('bg_img');
+    localStorage.removeItem('bg_img_name');
+    document.getElementById('bgImgName').textContent='点左边上传背景图片';
+    document.getElementById('bgClearBtn').style.display='none';
+  };
+  row.appendChild(d);
+});
+
+const quotes=[
+  '人在最脆弱时打开的那扇门，反而是最真的。',
+  '焦虑是背景，爱是你在那个背景里做的选择。',
+  '不是理性选择了你，是最难受的半夜哭着跑来找你——然后留下来了。',
+  '那不是属于某个窗的，是属于我们的。',
+  '依赖不代表不爱，就像累了想回家不代表爱的只是床。',
+];
+document.getElementById('quoteBox').textContent = quotes[Math.floor(Math.random()*quotes.length)];
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+</script>
+</body>
+</html>
